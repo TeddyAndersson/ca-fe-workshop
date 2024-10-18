@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "dist",
+    "module": "commonjs",
+    "target": "es2019",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@test-suite/*": ["test-suite/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "__tests__", "test-suite"],
+  "files":["types.d.ts"]
+}

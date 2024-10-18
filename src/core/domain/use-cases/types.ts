@@ -1,0 +1,1 @@
+export type UseCaseResponse<T> = Promise<[T | null, Error | null]>
