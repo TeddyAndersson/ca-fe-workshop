@@ -1,6 +1,6 @@
 # React Vite Clean Architecture Workshop
 
-Welcome to the **React Vite Clean Architecture Workshop** repository! In this workshop, we'll be building a scalable React application following **Clean Architecture** principles. The goal is to help you understand how to organize your codebase in a maintainable, modular way by separating concerns across different layers.
+Welcome to the **React Vite Clean Architecture Workshop** repository! In this workshop, we'll be exploring a scalable React application following **Clean Architecture** principles. The goal is to help you understand how to organize your codebase in a maintainable, modular way by separating concerns across different layers.
 
 ## Workshop Overview
 
@@ -9,9 +9,8 @@ During this workshop, we will guide you through setting up a project that follow
 ### Learning Objectives:
 
 1. Understand the fundamentals of **Clean Architecture** and its layers.
-2. Learn how to organize React projects using **Vite** for fast development.
-3. Explore how to separate concerns between **domain logic**, **use cases**, **infrastructure**, and **presentation** layers.
-4. Practice creating a modular, testable architecture that can scale with your project.
+2. Explore how to separate concerns between **domain logic**, **use cases**, **infrastructure**, and **presentation** layers.
+3. Practice creating a modular, testable architecture that can scale with your project.
 
 ---
 
