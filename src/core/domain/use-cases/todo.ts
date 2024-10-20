@@ -13,7 +13,7 @@ export type FindTodo = (byId: string) => UseCaseResponse<Todo>
 // FIND MANY TODOS
 export type FindManyTodos = (filters: {
     byPriority?: 'low' |'medium' | 'high';
-    byDueDate?: 'asc' | 'desc';
+    byOrder?: 'asc' | 'desc' 
 }) => UseCaseResponse<Todo[]>
 
 

@@ -1,99 +1,79 @@
-import { AddTodo, DeleteTodo, FindManyTodos, FindTodo, UpdateTodo } from "@src/core/domain/use-cases/todo";
+import { AddTodo, DeleteTodo, FindManyTodos, FindTodo, UpdateTodo } from "../../core/domain/use-cases/todo";
 import { addTodoDTO, deleteTodoDTO, getTodoDTO, listTodoDTO, updateTodoDTO } from "../dto/todo.dto";
-import { Request, Response } from "express";
-import { Todo } from "@src/core/domain/entities/Todo";
+import { Todo } from "../../core/domain/entities/Todo";
 
 
 type TBuildTodoControllerDependecies = {
     addTodo: AddTodo,
     getTodo: FindTodo,
-    listTodo: FindManyTodos,
+    listTodos: FindManyTodos,
     updateTodo: UpdateTodo,
     deleteTodo: DeleteTodo,
 }
 
-export const buildTodoController = ({addTodo, getTodo, listTodo, deleteTodo, updateTodo }: TBuildTodoControllerDependecies) => ({
-    addTodo: async (req: Request, res: Response) => {
-        const dto = await addTodoDTO.safeParseAsync(req.body);
+export type TodoController = {
+    addTodo: (input: {todo: Omit<Todo, 'id' | 'completed'>}) => Promise<Todo>,
+    getTodo: (input: {id: string}) => Promise<Todo>,
+    listTodos: (input: {byPriority?: Todo['priority'], byOrder?: 'asc' | 'desc'}) => Promise<Todo[]>,
+    updateTodo: (input:{todo: Todo}) => Promise<Todo>,
+    deleteTodo: (input: {id: string}) => Promise<{id: string}>,
+}
 
-        if (!dto.success) {
-            return res.status(400).json(dto.error.issues);
-        }
+export const buildTodoController = ({addTodo, getTodo, listTodos, deleteTodo, updateTodo }: TBuildTodoControllerDependecies): TodoController => ({
+    addTodo: async (input) => {
 
         const todo: Todo = {
             id: Math.random().toString(36).substr(2, 9),
             completed: false,
-            ...dto.data
+            ...input.todo
         }
 
         const [addedTodo, error] = await addTodo(todo)
         if (!addedTodo) {
-            return res.status(500).json(JSON.stringify(error));
+            console.log(error)
+            throw new Error("An error occured while adding the todo")
         }
 
-        res.json(addedTodo);
+        return todo
     },
-    getTodo: async (req: Request, res: Response) => {
-        const dto = await getTodoDTO.safeParseAsync({id: req.params.id});
+    getTodo: async (input) => {
 
-        if (!dto.success) {
-            return res.status(400).json({message: "Some of the passed parameters are not valid", issues: dto.error.issues});
-        }
-
-        const { id } = dto.data; 
+        const { id } = input; 
         const [todo, error] = await getTodo(id)
         if (!todo)  {
-            return res.status(404).json(JSON.stringify(error));
+            console.log(error);
+            throw new Error("An error occured while adding the todo")
         }
 
-        res.json(todo)
+        return todo
     },
-    listTodo: async (req: Request, res: Response) => {
-        const dto = await listTodoDTO.safeParseAsync(req.params);
-
-        if (!dto.success) {
-            return res.status(400).json(JSON.stringify(dto.error.issues));
-        }
-        
-        const { byPriority, byDueDate } = dto.data
-        const [todos, error] = await listTodo({byPriority, byDueDate})
-        if (!todos || !todos.length) { 
-            return res.status(404).json(JSON.stringify(error));
+    listTodos: async (input) => {
+        const { byPriority, byOrder } = input
+        const [todos, error] = await listTodos({byPriority, byOrder})
+        if (!todos) { 
+            console.error(error)
+            throw new Error("An error occured while retriving the list of todos")
         }
 
-        res.json(todos);
+        return todos
     },
-    updateTodo: async (req: Request, res: Response) => {
-        const dto = await updateTodoDTO.safeParseAsync({id: req.params.id, ...req.body});
-
-        if (!dto.success) {
-            return res.status(400).json(dto.error.issues);
-        }
-
-        const todo: Todo = {
-           ...dto.data
-        }
-
-        const [updatedTodo, error] = await updateTodo(todo)
-        console.log(updatedTodo)
+    updateTodo: async (input) => {
+        const [updatedTodo, error] = await updateTodo(input.todo)
         if (!updatedTodo) {
-            return res.status(500).json(JSON.stringify(error));
+            console.error(error)
+            throw new Error("An error occured while updating your todo")
         }
 
-        res.json(updatedTodo);
+        return updatedTodo
     },
-    deleteTodo: async (req: Request, res: Response) => {
-        const dto = await deleteTodoDTO.safeParseAsync({id: req.params.id});
-
-        if (!dto.success) {
-            return res.status(400).json(dto.error.issues);
-        }
-        const { id } = dto.data; 
+    deleteTodo: async (input) => {
+        const { id } = input;
         const [todoId, error] = await deleteTodo(id)
         if (!todoId) {
-            return res.status(500).json(JSON.stringify(error));
+            console.log(error)
+            throw new Error("An error occured while deleting the todo")
         }
 
-        res.status(200).json({message: `Todo with id '${id} deleted'`});
+        return { id: todoId }
     }
 }) 

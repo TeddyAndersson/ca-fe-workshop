@@ -1,19 +1,13 @@
 {
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
   "compilerOptions": {
-    "strict": true,
-    "outDir": "dist",
-    "module": "commonjs",
-    "target": "es2019",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["./src/*"],
-      "@test-suite/*": ["test-suite/*"]
+      "@/*": ["./src/*"]
     }
-  },
-  "include": ["src/**/*.ts", "__tests__", "test-suite"],
-  "files":["types.d.ts"]
+  }
 }

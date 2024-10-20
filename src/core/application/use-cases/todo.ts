@@ -1,12 +1,13 @@
-import { AddTodo, DeleteTodo, FindManyTodos, FindTodo, UpdateTodo } from "@src/core/domain/use-cases/todo";
+import { AddTodo, DeleteTodo, FindManyTodos, FindTodo, UpdateTodo } from "../../domain/use-cases/todo";
 import { TodoRepository } from "../interfaces/repositories/todo.repository";
+import { Todo } from "../../domain/entities/Todo";
 
 export const buildAddTodoUseCase = (
   deps: {
     repositories: {
       todoRepository: TodoRepository
     }
-  }): AddTodo  => async (todo) => {
+  }): AddTodo  => async (todo: Todo) => {
     const { repositories } = deps;
     const { todoRepository } = repositories;
 
@@ -23,7 +24,7 @@ export const buildFindTodoUseCase = (
     repositories: {
       todoRepository: TodoRepository
     }
-  }): FindTodo  => async (id) => {
+  }): FindTodo  => async (id: string) => {
     const { repositories } = deps;
     const { todoRepository } = repositories;
 
@@ -40,11 +41,14 @@ export const buildListTodosUseCase = (
     repositories: {
       todoRepository: TodoRepository
     }
-  }): FindManyTodos  => async ({byPriority, byDueDate}) => {
+  }): FindManyTodos  => async ({
+    byPriority,
+    byOrder
+  }) => {
     const { repositories } = deps;
     const { todoRepository } = repositories;
 
-    const [result, repositoryError] = await todoRepository.findMany({byPriority, byDueDate})
+    const [result, repositoryError] = await todoRepository.findMany({byPriority, byOrder})
     if (!result) {
         return [null, repositoryError]
     }
@@ -57,7 +61,7 @@ export const buildDeleteTodoUseCase = (
     repositories: {
       todoRepository: TodoRepository
     }
-  }): DeleteTodo  => async (id) => {
+  }): DeleteTodo  => async (id: string) => {
     const { repositories } = deps;
     const { todoRepository } = repositories;
 
@@ -79,7 +83,7 @@ export const buildUpdateTodoUseCase = (
     repositories: {
       todoRepository: TodoRepository
     }
-  }): UpdateTodo  => async (todo) => {
+  }): UpdateTodo  => async (todo: Todo) => {
     const { repositories } = deps;
     const { todoRepository } = repositories;
 
