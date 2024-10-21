@@ -17,8 +17,24 @@ During this workshop, we will guide you through setting up a project that follow
 ## Project Structure
 
 The project is divided into several key layers, each responsible for a distinct part of the application:
-
-src/ │ ├── core/ │ ├── domain/ # Entities and business rules (Core logic) │ ├── application/ # Use cases and service interfaces │ ├── infrastructure/ # Data access and external service integrations │ ├── interface/ # UI & API gateways, external interfaces │ ├── presentation/ # React components, hooks, and UI logic │ ├── App.tsx # Main application entry point └── index.tsx # Application bootstrap
+```bash
+src/  │ 
+      ├── core/ 
+          │ 
+          ├── domain/ # Entities and business rules (Core logic) 
+          │ 
+          ├── application/ # Use cases and service interfaces 
+      │ 
+      ├── infrastructure/ # Data access and external service integrations 
+      │ 
+      ├── interface/ # UI & API gateways, external interfaces 
+      │ 
+      ├── presentation/ # React components, hooks, and UI logic 
+          │ 
+          ├── index.tsx # presentation application entry point 
+      │ 
+      └── main.tsx # Application bootstrap
+```
 
 ### Layer Details:
 
